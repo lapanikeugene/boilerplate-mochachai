@@ -57,10 +57,11 @@ suite('Functional Tests', function () {
           assert.equal(res.status,200);
           assert.equal(res.type,"application/json");
           assert.equal(res.body.name,"Giovanni");
-          assert.equal(res.body.surname,"da Verrazzano")
+          assert.equal(res.body.surname,"da Verrazzano");
+          done();
         })
 
-      done();
+     
     });
   });
 });
@@ -88,7 +89,7 @@ suite('Functional Tests with Zombie.js', function () {
   suite('"Famous Italian Explorers" form', function () {
     // #5
     test('Submit the surname "Colombo" in the HTML form', function (done) {
-      browser.fill('surname','').then(()=>{
+      browser.fill('surname','Colombo').then(()=>{
         browser.pressButton('submit',()=>{
           browser.assert.success();
           browser.assert.text('span#name','Cristoforo');
@@ -104,9 +105,18 @@ suite('Functional Tests with Zombie.js', function () {
     });
     // #6
     test('Submit the surname "Vespucci" in the HTML form', function (done) {
-      assert.fail();
+      browser.fill('surname','Vespucci').then(()=>{
+        browser.pressButton('submit',()=>{
+          browser.assert.success();
+          browser.assert.text('span#name','Amerigo');
+          browser.assert.text('span#surname','Vespucci');
+          browser.assert.elements('span#dates', 1);
 
-      done();
+          done();
+        })
+        
+      })
+      
     });
   });
 });
