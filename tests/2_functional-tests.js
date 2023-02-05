@@ -66,11 +66,13 @@ suite('Functional Tests', function () {
 });
 
 const Browser = require('zombie');
-Browser.site = 'http://localhost:3000/'; // Your URL here
+Browser.site = '0.0.0.0:3000';
 
 suite('Functional Tests with Zombie.js', function () {
   const browser = new Browser();
+  
   suiteSetup((done)=>{
+    console.log("done");
     return browser.visit("/",done);
   })
  this.timeout(5000);
@@ -86,9 +88,19 @@ suite('Functional Tests with Zombie.js', function () {
   suite('"Famous Italian Explorers" form', function () {
     // #5
     test('Submit the surname "Colombo" in the HTML form', function (done) {
-      assert.fail();
+      browser.fill('surname','').then(()=>{
+        browser.pressButton('submit',()=>{
+          browser.assert.success();
+          browser.assert.text('span#name','Cristoforo');
+          browser.assert.text('span#surname','Colombo');
+          browser.assert.elements('span#dates', 1);
 
-      done();
+          done();
+        })
+      })
+
+
+     
     });
     // #6
     test('Submit the surname "Vespucci" in the HTML form', function (done) {
